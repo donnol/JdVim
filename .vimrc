@@ -62,10 +62,10 @@ syntax on
 "colorscheme shine
 "colorscheme torte
 "colorscheme blue
-"colorscheme desert
+colorscheme desert
 "colorscheme evening
 "colorscheme morning
-colorscheme pablo
+"colorscheme pablo
 "colorscheme ron
 "colorscheme slate
 "colorscheme zellner
