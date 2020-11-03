@@ -1,98 +1,139 @@
-"my vim setting
+"==============================================================================
+" vim 内置配置 
+"==============================================================================
 
-set nocompatible              " be iMproved, required
-filetype off                  " required
+" 设置 vimrc 修改保存后立刻生效，不用在重新打开
+" 建议配置完成后将这个关闭
+autocmd BufWritePost $MYVIMRC source $MYVIMRC
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
+" 关闭兼容模式
+set nocompatible
 
-" let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
+set nu " 设置行号
+set relativenumber " 相对行号
+set cursorline "突出显示当前行
+" set cursorcolumn " 突出显示当前列
+set showmatch " 显示括号匹配
+set list
+set listchars=tab:>-,trail:-  " 显示tab为>---
+set lcs+=space:· " 显示空格为'dot'
 
-" The following are examples of different formats supported.
-" Keep Plugin commands between vundle#begin/end.
-" plugin on GitHub repo
-""Plugin 'tpope/vim-fugitive'
-" plugin from http://vim-scripts.org/vim/scripts.html
-""Plugin 'L9'
-" Git plugin not hosted on GitHub
-""Plugin 'git://git.wincent.com/command-t.git'
-" git repos on your local machine (i.e. when working on your own plugin)
-""Plugin 'file:///home/gmarik/path/to/plugin'
-" The sparkup vim script is in a subdirectory of this repo called vim.
-" Pass the path to set the runtimepath properly.
-""Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-" Avoid a name conflict with L9
-""Plugin 'user/L9', {'name': 'newL9'}
+" tab 缩进
+set tabstop=4 " 设置Tab长度为4空格
+set shiftwidth=4 " 设置自动缩进长度为4空格
+set autoindent " 继承前一行的缩进方式，适用于多行注释
 
-" Install Vim-go
-Plugin 'fatih/vim-go'
+" 定义快捷键的前缀，即<Leader>
+let mapleader=";"
 
-" Plugin 'majutsushi/tagbar'
+" ==== 系统剪切板复制粘贴 ====
+" v 模式下复制内容到系统剪切板
+vmap <Leader>c "+yy
+" n 模式下复制一行到系统剪切板
+nmap <Leader>c "+yy
+" n 模式下粘贴系统剪切板的内容
+nmap <Leader>v "+p
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
-
-set nu
-set autoindent
-syntax on
-
-"colorscheme default 
-"colorscheme darkblue
-"colorscheme delek
-"colorscheme elflord
-"colorscheme koehler
-"colorscheme murphy
-"colorscheme peachpuff
-"colorscheme shine
-"colorscheme torte
-"colorscheme blue
-colorscheme desert
-"colorscheme evening
-"colorscheme morning
-"colorscheme pablo
-"colorscheme ron
-"colorscheme slate
-"colorscheme zellner
-
-"set guifont=Monospace:h25
-set guifont=Courier\ New:h15
-
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
-
-"set foldmethod=indent
-set foldmethod=diff
-set encoding=utf-8
-set termencoding=utf-8
-set fileencoding=utf-8
-set fileencodings=utf-8,gb2312,chinese,cp936,gbk
-set fileformats=unix
-
+" 开启实时搜索
+set incsearch
+" set highlight
 set hlsearch
-set title
-set pastetoggle=<F9>
-set directory=~/tmp
-set gcr=a:blinkon0
-set laststatus=2
-set ruler
-"set statusline+=%-16{strftime(\"%Y-%m-%d\ %H:%M:%S\")} "该设置可显示当前时间
-"
-"设置tarbar启动快捷键
-nmap <F8> :TagbarToggle<CR>
+" 搜索时大小写不敏感
+set ignorecase
+syntax enable
+syntax on                    " 开启文件类型侦测
+filetype plugin indent on    " 启用自动补全
+
+" 退出插入模式指定类型的文件自动保存
+au InsertLeave *.go,*.sh,*.php write
+
+" 插件开始的位置
+call plug#begin('~/.vim/plugged')
+
+" Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
+" 可以快速对齐的插件
+Plug 'junegunn/vim-easy-align'
+
+" 用来提供一个导航目录的侧边栏
+Plug 'scrooloose/nerdtree'
+
+" 可以使 nerdtree 的 tab 更加友好些
+Plug 'jistr/vim-nerdtree-tabs'
+
+" 可以在导航目录中看到 git 版本信息
+Plug 'Xuyuanp/nerdtree-git-plugin'
+
+" 查看当前代码文件中的变量和函数列表的插件，
+" 可以切换和跳转到代码中对应的变量和函数的位置
+" 大纲式导航, Go 需要 https://github.com/jstemmer/gotags 支持
+Plug 'majutsushi/tagbar'
+
+" 自动补全括号的插件，包括小括号，中括号，以及花括号
+Plug 'jiangmiao/auto-pairs'
+
+" Vim状态栏插件，包括显示行号，列号，文件类型，文件名，以及Git状态
+Plug 'vim-airline/vim-airline'
+
+" 有道词典在线翻译
+Plug 'ianva/vim-youdao-translater'
+
+" 代码自动完成，安装完插件还需要额外配置才可以使用
+Plug 'Valloric/YouCompleteMe'
+
+" 可以在文档中显示 git 信息
+Plug 'airblade/vim-gitgutter'
+
+
+" 下面两个插件要配合使用，可以自动生成代码块
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+
+" 可以在 vim 中使用 tab 补全
+Plug 'vim-scripts/SuperTab'
+
+" 可以在 vim 中自动完成
+Plug 'Shougo/neocomplete.vim'
+
+
+" 配色方案
+" colorscheme neodark
+Plug 'KeitaNakamura/neodark.vim'
+" colorscheme monokai
+Plug 'crusoexia/vim-monokai'
+" colorscheme github 
+Plug 'acarapetis/vim-colors-github'
+" colorscheme one 
+Plug 'rakr/vim-one'
+
+" go 主要插件
+Plug 'fatih/vim-go', { 'tag': '*' }
+" go 中的代码追踪，输入 gd 就可以自动跳转
+Plug 'dgryski/vim-godef'
+
+" markdown 插件
+Plug 'iamcco/mathjax-support-for-mkdp'
+Plug 'iamcco/markdown-preview.vim'
+
+" 插件结束的位置，插件全部放在此行上面
+call plug#end()
+
+" 配置
+
+" gopls
+let g:go_gopls_enabled = 1
+
+" YouCompleteMe 键绑定
+let g:ycm_key_list_select_completion = ['<C-n>', '<space>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+let g:SuperTabDefaultCompletionType = '<C-n>'
+
+" better key bindings for UltiSnipsExpandTrigger
+let g:UltiSnipsExpandTrigger = "<tab>"
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+
+" nerd tree默认打开并将光标移到编辑窗口
+autocmd VimEnter * NERDTree
+wincmd w
+autocmd VimEnter * wincmd w
+
