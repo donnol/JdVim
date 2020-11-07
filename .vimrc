@@ -17,6 +17,9 @@ set showmatch " 显示括号匹配
 set list
 set listchars=tab:>-,trail:-  " 显示tab为>---
 set lcs+=space:· " 显示空格为'dot'
+set lcs+=eol:↓ " 末尾换行符显示为emoji:'↓'
+
+" set fixeol
 
 " tab 缩进
 set tabstop=4 " 设置Tab长度为4空格
@@ -48,6 +51,7 @@ filetype plugin indent on    " 启用自动补全
 au InsertLeave *.go,*.sh,*.php write
 
 " 插件开始的位置
+" 执行:PlugInstall安装插件
 call plug#begin('~/.vim/plugged')
 
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
@@ -104,6 +108,8 @@ Plug 'crusoexia/vim-monokai'
 Plug 'acarapetis/vim-colors-github'
 " colorscheme one 
 Plug 'rakr/vim-one'
+" dracula
+Plug 'dracula/vim', { 'as': 'dracula' }
 
 " go 主要插件
 Plug 'fatih/vim-go', { 'tag': '*' }
@@ -118,9 +124,15 @@ Plug 'iamcco/markdown-preview.vim'
 call plug#end()
 
 " 配置
+"
+" 主体
+colorscheme dracula
 
 " gopls
 let g:go_gopls_enabled = 1
+let g:go_def_mode = 'gopls'
+let g:go_info_mode = 'gopls'
+let g:go_fmt_command = "goimports" " 保存文件时执行goimports
 
 " YouCompleteMe 键绑定
 let g:ycm_key_list_select_completion = ['<C-n>', '<space>']
@@ -136,4 +148,9 @@ let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 autocmd VimEnter * NERDTree
 wincmd w
 autocmd VimEnter * wincmd w
+
+" Remember position of last edit and return on reopen
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
 
