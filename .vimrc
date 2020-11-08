@@ -133,6 +133,7 @@ let g:go_gopls_enabled = 1
 let g:go_def_mode = 'gopls'
 let g:go_info_mode = 'gopls'
 let g:go_fmt_command = "goimports" " 保存文件时执行goimports
+let g:go_auto_type_info = 1
 
 " YouCompleteMe 键绑定
 let g:ycm_key_list_select_completion = ['<C-n>', '<space>']
